@@ -1,0 +1,47 @@
+version: '3.8'
+
+services: 
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: backend
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    networks:
+      - app-network
+    restart: always
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: frontend
+    depends_on:
+      - backend
+    restart: always
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+  db:
+    image: mysql:latest
+    container_name: mysql_db
+    environment:
+      MYSQL_ROOT_PASSWORD: Sufi123456*
+      MYSQL_DATABASE: all_tables
+      MYSQL_USER: sufyan
+      MYSQL_PASSWORD: Sufi123456*
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+    restart: always
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db_data:
